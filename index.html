@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Atharva | Neural System Specialist 2036</title>
+    <!-- BEGIN: Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- END: Tailwind CDN -->
+    <!-- BEGIN: Tailwind Config -->
+    <script data-purpose="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#020205',
+                        plasmaViolet: '#6b21a8',
+                        electricCyan: '#06b6d4',
+                        iridescentSilver: '#e2e8f0',
+                    },
+                    animation: {
+                        'hologram-flicker': 'flicker 3s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'spin-slow': 'spin 20s linear infinite',
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        flicker: {
+                            '0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100%': { opacity: '1', filter: 'brightness(1)' },
+                            '20%, 21.999%, 63%, 63.999%, 65%, 69.999%': { opacity: '0.4', filter: 'brightness(2) saturate(2)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- END: Tailwind Config -->
+    <!-- BEGIN: Custom Styles -->
+    <style data-purpose="global-layout">
+        body {
+            background-color: #020205;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+
+        .liquid-chrome-text {
+            background: linear-gradient(45deg,
+                    #ffffff 0%,
+                    #94a3b8 25%,
+                    #06b6d4 50%,
+                    #6b21a8 75%,
+                    #ffffff 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: chrome-flow 5s linear infinite;
+        }
+
+        nav {
+            min-width: 300px;
+            max-width: 90%;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        /* ===== NAVBAR BASE ===== */
+        .nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+
+            display: flex;
+            gap: 30px;
+
+            padding: 14px 30px;
+            border-radius: 50px;
+
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            transition: all 0.4s ease;
+        }
+
+        /* ===== NAV LINKS ===== */
+        .nav a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        .nav a:hover {
+            color: #06b6d4;
+        }
+
+        /* ===== SCROLL EFFECT ===== */
+        .nav.scrolled {
+            top: 10px;
+            padding: 10px 24px;
+
+            backdrop-filter: blur(20px);
+            background: rgba(0, 0, 0, 0.6);
+
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+
+        @keyframes chrome-flow {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        .neural-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .iris-scanner {
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .iris-scanner::before {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border: 1px solid rgba(107, 33, 168, 0.5);
+            border-radius: 50%;
+            animation: spin 10s linear infinite;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #020205;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #06b6d4;
+            border-radius: 10px;
+        }
+
+
+        /* ===== SCROLL REVEAL ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* LEFT */
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-80px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* RIGHT */
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(80px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* ZOOM */
+        .reveal-zoom {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s ease;
+        }
+
+        .reveal-zoom.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+
+</head>
+
+<body class="selection:bg-electricCyan selection:text-void">
+    <!-- BEGIN: Neural Background -->
+    <canvas class="neural-bg" data-purpose="background-visualizer" id="neuralCanvas"></canvas>
+    <!-- END: Neural Background -->
+    <!-- BEGIN: Navigation -->
+    <nav
+        class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 px-8 py-4 glass-morphism rounded-full backdrop-blur-md">
+        <a class="text-xs uppercase tracking-[0.3em] hover:text-electricCyan transition-colors" href="#hero">Home </a>
+        <a class="text-xs uppercase tracking-[0.3em] hover:text-electricCyan transition-colors" href="#map">About </a>
+        <a class="text-xs uppercase tracking-[0.3em] hover:text-electricCyan transition-colors"
+            href="#archives">Projects</a>
+        <a class="text-xs uppercase tracking-[0.3em] hover:text-electricCyan transition-colors" href="#link">Contact</a>
+    </nav>
+    <!-- END: Navigation -->
+    <!-- BEGIN: Hero Section -->
+    <section class="min-h-screen flex flex-col items-center justify-center relative px-4 overflow-hidden" id="hero">
+        <div class="relative z-10 text-center animate-float">
+            <!-- Biometric Element -->
+            <div class="iris-scanner w-24 h-24 mx-auto mb-12 flex items-center justify-center">
+                <div
+                    class="w-16 h-16 rounded-full bg-gradient-to-tr from-plasmaViolet to-electricCyan opacity-40 animate-pulse">
+                </div>
+                <div class="absolute w-20 h-0.5 bg-electricCyan/50 animate-pulse-fast"></div>
+            </div>
+            <h1
+                class="text-7xl md:text-9xl font-black liquid-chrome-text mb-4 drop-shadow-[0_0_30px_rgba(6,182,212,0.5)]">
+                ATHARVA
+            </h1>
+            <p
+                class="text-electricCyan tracking-[0.5em] text-sm md:text-lg font-light uppercase animate-hologram-flicker">
+                Cyber-Security | Web Developer | Bug Bounty hunter
+            </p>
+            <div class="mt-16 flex items-center justify-center gap-4 text-[10px] text-gray-500 font-mono">
+                <span>STATUS: SYNCHRONIZED</span>
+                <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+            </div>
+        </div>
+    </section>
+    <!-- END: Hero Section -->
+    <!-- BEGIN: Cognitive Map (Skills) -->
+    <section class="min-h-screen py-24 px-4 relative flex items-center reveal-left" id="map">
+        <div class="max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-20">
+            <div class="relative">
+                <h2 class="text-4xl font-light tracking-tighter mb-8 flex items-center gap-4">
+                    <span class="w-2 h-12 bg-plasmaViolet"></span>
+                    About Us
+                </h2>
+                <p class="text-gray-400 mb-12 leading-relaxed max-w-md">
+                    I am Atharva Abhijit Deshmukh — a Cybersecurity enthusiast and Full Stack Developer driven by
+                    curiosity, problem-solving, and real-world experimentation.
+
+                    I actively explore web application security by analyzing vulnerabilities such as XSS, authentication
+                    flaws, brute-force weaknesses, and phishing techniques to understand how systems can be exploited —
+                    and how to defend them effectively.
+
+                    Alongside cybersecurity, I build modern, responsive, and scalable web applications using HTML, CSS,
+                    JavaScript, and full-stack technologies like MERN and PERN. I focus on creating clean UI, smooth
+                    user experiences, and secure backend systems.
+
+                    I believe in learning by building, breaking, and improving — constantly pushing my limits to grow in
+                    both development and security domains.
+                </p>
+
+                <p class="text-electricCyan text-xs tracking-widest">
+                    BUILD • BREAK • SECURE • REPEAT
+                </p> <br>
+
+                <!-- Skill Nodes -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div
+                        class="glass-morphism p-6 rounded-tl-3xl rounded-br-3xl hover:border-electricCyan transition-all group cursor-crosshair">
+                        <span class="text-xs text-electricCyan block mb-2 font-mono">01/ HTML/CSS/JS/SQL/NODE.JS/REACT
+                        </span>
+                        <div class="h-1 bg-gray-800 w-full overflow-hidden">
+                            <div class="h-full bg-electricCyan w-[92%]"></div>
+                        </div>
+                    </div>
+                    <div
+                        class="glass-morphism p-6 rounded-tr-3xl rounded-bl-3xl hover:border-plasmaViolet transition-all group cursor-crosshair">
+                        <span class="text-xs text-plasmaViolet block mb-2 font-mono">02/ ETHICAL HACKING</span>
+                        <div class="h-1 bg-gray-800 w-full overflow-hidden">
+                            <div class="h-full bg-plasmaViolet w-[88%]"></div>
+                        </div>
+
+                    </div>
+                    <div
+                        class="glass-morphism p-6 rounded-tl-3xl rounded-br-3xl hover:border-electricCyan transition-all group cursor-crosshair">
+                        <span class="text-xs text-electricCyan block mb-2 font-mono">03/ GITHUB</span>
+                        <div class="h-1 bg-gray-800 w-full overflow-hidden">
+                            <div class="h-full bg-electricCyan w-[92%]"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="relative flex items-center justify-center">
+                <!-- Floating Crystal Skill Visualization -->
+                <div
+                    class="w-64 h-64 bg-gradient-to-br from-electricCyan/20 to-plasmaViolet/20 rounded-full blur-3xl absolute animate-pulse">
+                </div>
+                <div class="iris-scanner w-72 h-72 flex items-center justify-center animate-spin-slow">
+                    <div class="w-48 h-48 border border-white/5 rotate-45 flex items-center justify-center">
+                        <div class="w-32 h-32 border border-white/10 -rotate-12"></div>
+                    </div>
+                </div>
+                <div class="absolute text-xs font-mono text-electricCyan/50 tracking-widest text-center">
+                    CORE UPLINK ACTIVE<br />SCANNING SUB-PROCESSORS...
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END: Cognitive Map -->
+    <!-- BEGIN: Simulation Archives (Projects) -->
+    <section class="min-h-screen py-24 px-4 relative reveal" id="archives">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-center text-4xl font-light tracking-widest mb-24 uppercase">Projects</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                <!-- Project 1 -->
+                <div
+                    class="group relative overflow-hidden glass-morphism p-1 rounded-2xl transition-transform hover:-translate-y-2">
+                    <div class="h-64 bg-void/50 rounded-xl overflow-hidden relative">
+                        <img class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
+                            src="Passwordgenerator.png" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-void to-transparent"></div>
+                    </div>
+
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold text-iridescentSilver mb-2 uppercase tracking-widest">
+                            Password Generator
+                        </h3>
+
+                        <p class="text-xs text-gray-500 mb-4 uppercase tracking-tighter">
+                            Generate secure passwords with custom options
+                        </p>
+
+                        <a href="https://rydencrexo-stack.github.io/Password-Generator/" target="_blank"
+                            class="block text-center w-full py-3 bg-white/5 border border-white/10 text-xs tracking-[0.4em] uppercase hover:bg-electricCyan hover:text-void transition-all rounded-lg">
+                            LIVE DEMO
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div
+                    class="group relative overflow-hidden glass-morphism p-1 rounded-2xl transition-transform hover:-translate-y-2 mt-12 md:mt-24">
+                    <div class="h-64 bg-void/50 rounded-xl overflow-hidden relative">
+                        <img class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
+                            src="RecipeFinder.png" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-void to-transparent"></div>
+                    </div>
+
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold text-iridescentSilver mb-2 uppercase tracking-widest">
+                            Recipe Finder
+                        </h3>
+
+                        <p class="text-xs text-gray-500 mb-4 uppercase tracking-tighter">
+                            Search and explore recipes dynamically
+                        </p>
+
+                        <a href="https://rydencrexo-stack.github.io/Recipe-Finder/" target="_blank"
+                            class="block text-center w-full py-3 bg-white/5 border border-white/10 text-xs tracking-[0.4em] uppercase hover:bg-plasmaViolet hover:text-white transition-all rounded-lg">
+                            LIVE DEMO
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div
+                    class="group relative overflow-hidden glass-morphism p-1 rounded-2xl transition-transform hover:-translate-y-2">
+                    <div class="h-64 bg-void/50 rounded-xl overflow-hidden relative">
+                        <img class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
+                            src="Iphone14.png" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-void to-transparent"></div>
+                    </div>
+
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold text-iridescentSilver mb-2 uppercase tracking-widest">
+                            iPhone Dynamic Island UI
+                        </h3>
+
+                        <p class="text-xs text-gray-500 mb-4 uppercase tracking-tighter">
+                            Interactive UI inspired by iPhone 14 dynamic island
+                        </p>
+
+                        <a href="https://rydencrexo-stack.github.io/Iphone-14-dynamic-islands/" target="_blank"
+                            class="block text-center w-full py-3 bg-white/5 border border-white/10 text-xs tracking-[0.4em] uppercase hover:bg-iridescentSilver hover:text-void transition-all rounded-lg">
+                            LIVE DEMO
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- END: Simulation Archives -->
+    <!-- BEGIN: Neural Link (Contact) -->
+    <section class="min-h-screen py-24 px-4 flex items-center justify-center relative reveal-zoom" id="link">
+        <div class="max-w-md w-full glass-morphism p-12 rounded-[3rem] text-center relative overflow-hidden">
+
+            <h2 class="text-3xl font-light mb-8 tracking-[0.3em] uppercase">
+                Contact Terminal
+            </h2>
+
+            <p class="text-gray-500 text-xs mb-10 tracking-widest">
+                TYPE MESSAGE AND TRANSMIT SECURE SIGNAL
+            </p>
+
+            <form id="contactForm" class="space-y-6">
+
+                <input id="name" required placeholder="Your Name"
+                    class="w-full bg-transparent border-b border-white/10 py-3 text-sm focus:outline-none focus:border-electricCyan font-mono" />
+
+                <input id="email" required placeholder="EMAIL "
+                    class="w-full bg-transparent border-b border-white/10 py-3 text-sm focus:outline-none focus:border-electricCyan font-mono" />
+
+                <textarea id="message" required placeholder="MESSAGE For Me ..."
+                    class="w-full bg-transparent border-b border-white/10 py-3 text-sm focus:outline-none focus:border-electricCyan font-mono"></textarea>
+
+                <button type="submit"
+                    class="px-10 py-3 rounded-full border border-electricCyan text-electricCyan hover:bg-electricCyan hover:text-black transition">
+                    TRANSMIT
+                </button>
+                <p id="formMsg" class="text-green-400 text-xs font-mono mt-4 hidden">
+                    ✔ Message Sent Successfully
+                </p>
+
+            </form>
+
+        </div>
+    </section>
+
+    <!-- END: Neural Link -->
+    <!-- BEGIN: Footer -->
+
+    <footer class="relative py-24 border-t border-white/10 text-center overflow-hidden">
+
+        <!-- 🌌 Animated Gradient Background -->
+        <div class="absolute inset-0 opacity-20 pointer-events-none">
+            <div
+                class="absolute w-[500px] h-[500px] bg-electricCyan blur-[140px] top-0 left-1/2 -translate-x-1/2 animate-pulse">
+            </div>
+            <div class="absolute w-[400px] h-[400px] bg-plasmaViolet blur-[120px] bottom-0 right-1/3 animate-pulse">
+            </div>
+        </div>
+
+        <!-- ⚡ Animated Top Line -->
+        <div
+            class="w-60 h-[2px] bg-gradient-to-r from-transparent via-electricCyan to-transparent mx-auto mb-10 animate-pulse">
+        </div>
+
+        <!-- 🧠 Name -->
+        <h3 class="text-2xl md:text-3xl tracking-widest font-bold liquid-chrome-text mb-4">
+            ATHARVA ABHIJIT DESHMUKH
+        </h3>
+
+        <!-- Role -->
+        <p class="text-xs md:text-sm text-gray-400 uppercase tracking-[0.4em] mb-12">
+            Cybersecurity • Web Developer • Bug Bounty Hunter
+        </p>
+
+        <!-- 🚀 Social Icons -->
+        <div class="flex justify-center gap-10 mb-14">
+
+            <!-- GitHub -->
+            <div class="relative group">
+                <a href="https://github.com/rydencrexo-stack" target="_blank" class="icon-btn">
+                    <svg class="icon" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M12 .5C5.7.5.8 5.4.8 11.7c0 5 3.2 9.2 7.6 10.7.6.1.8-.3.8-.6v-2.1c-3.1.7-3.7-1.3-3.7-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.3 1.1 2.9.9.1-.6.4-1.1.7-1.3-2.5-.3-5.1-1.3-5.1-5.7 0-1.2.4-2.2 1.1-3-.1-.3-.5-1.4.1-2.9 0 0 .9-.3 3 .9.9-.3 1.9-.5 2.9-.5s2 .2 2.9.5c2.1-1.2 3-.9 3-.9.6 1.5.2 2.6.1 2.9.7.8 1.1 1.8 1.1 3 0 4.4-2.6 5.4-5.1 5.7.4.3.8 1 .8 2v3c0 .3.2.7.8.6 4.4-1.5 7.6-5.7 7.6-10.7C23.2 5.4 18.3.5 12 .5z" />
+                    </svg>
+                </a>
+                <span class="tooltip">GitHub</span>
+            </div>
+
+            <!-- Instagram -->
+            <div class="relative group">
+                <a href="https://www.instagram.com/urfav.atharva_?igsh=MXNvZTdhdGV6Z3d1NA==" target="_blank" class="icon-btn pink">
+                    <svg class="icon" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M7.75 2C4.574 2 2 4.574 2 7.75v8.5C2 19.426 4.574 22 7.75 22h8.5C19.426 22 22 19.426 22 16.25v-8.5C22 4.574 19.426 2 16.25 2h-8.5zm0 2h8.5C18.216 4 20 5.784 20 7.75v8.5c0 1.966-1.784 3.75-3.75 3.75h-8.5C5.784 20 4 18.216 4 16.25v-8.5C4 5.784 5.784 4 7.75 4zm8.75 1.5a.75.75 0 100 1.5.75.75 0 000-1.5zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6z" />
+                    </svg>
+                </a>
+                <span class="tooltip">Instagram</span>
+            </div>
+
+            <!-- Email -->
+            <div class="relative group">
+                <button onclick="copyEmail()" class="icon-btn">
+                    <span class="icon">@</span>
+                </button>
+                <span class="tooltip">Copy Email</span>
+            </div>
+
+        </div>
+
+        <!-- Divider -->
+        <div class="w-32 h-[1px] bg-white/10 mx-auto mb-8"></div>
+
+        <!-- Copyright -->
+        <p class="text-[10px] text-gray-600 uppercase tracking-[0.6em]">
+            © 2026 ALL RIGHTS RESERVED
+        </p>
+
+        <!-- 🟢 Status -->
+        <div
+            class="mt-6 flex justify-center items-center gap-2 text-[11px] text-electricCyan font-mono tracking-widest">
+            <span class="w-2 h-2 bg-electricCyan rounded-full animate-ping"></span>
+            SYSTEM ONLINE • SECURE CONNECTION
+        </div>
+
+    </footer>
+
+    <!-- 🔥 STYLES -->
+    <style>
+        .icon-btn {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.2);
+            border-color: #06b6d4;
+            color: #06b6d4;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+        }
+
+        .icon-btn.pink:hover {
+            border-color: #ec4899;
+            color: #ec4899;
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
+        }
+
+        .icon {
+            width: 22px;
+            height: 22px;
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: #aaa;
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .group:hover .tooltip {
+            opacity: 1;
+        }
+    </style>
+
+    <!-- 🔥 SCRIPT -->
+    <script>
+        function copyEmail() {
+            navigator.clipboard.writeText("atharva.main.co@gmail.com");
+            alert("📧 Email copied!");
+        }
+    </script>
+
+    <!-- END: Footer -->
+    <!-- BEGIN: Scripts -->
+    <script data-purpose="background-animation">
+        const canvas = document.getElementById('neuralCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        const particleCount = 100;
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 1.5;
+                this.vy = (Math.random() - 0.5) * 1.5;
+                this.radius = Math.random() * 2;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = Math.random() > 0.5 ? '#06b6d4' : '#6b21a8';
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach((p, i) => {
+                p.update();
+                p.draw();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if (dist < 150) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `rgba(107, 33, 168, ${0.1 * (1 - dist / 150)})`;
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', init);
+        init();
+        animate();
+    </script>
+    <script data-purpose="smooth-scroll">
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+    <!-- END: Scripts -->
+
+    <script>
+        const form = document.getElementById("contactForm");
+        const msg = document.getElementById("formMsg");
+
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const message = document.getElementById("message").value;
+
+            const res = await fetch("http://localhost:3000/contact", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ name, email, message })
+            });
+
+            if (res.ok) {
+                msg.classList.remove("hidden");
+                msg.innerText = "✔ Message Sent Successfully";
+                form.reset();
+            } else {
+                msg.classList.remove("hidden");
+                msg.innerText = "✖ Error saving";
+            }
+        });
+    </script>
+
+    <script>
+        function revealOnScroll() {
+            const elements = document.querySelectorAll(".reveal, .reveal-left, .reveal-right, .reveal-zoom");
+
+            elements.forEach((el) => {
+                const windowHeight = window.innerHeight;
+                const elementTop = el.getBoundingClientRect().top;
+                const revealPoint = 100;
+
+                if (elementTop < windowHeight - revealPoint) {
+                    el.classList.add("active");
+                }
+            });
+        }
+
+        window.addEventListener("scroll", revealOnScroll);
+
+        // Run once on load
+        revealOnScroll();
+    </script>
+
+</body>
+
+</html>
