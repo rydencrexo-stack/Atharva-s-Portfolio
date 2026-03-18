@@ -681,34 +681,40 @@
     <!-- END: Scripts -->
 
     <script>
-        const form = document.getElementById("contactForm");
-        const msg = document.getElementById("formMsg");
+    const form = document.getElementById("contactForm");
+    const msg = document.getElementById("formMsg");
 
-        form.addEventListener("submit", async function (e) {
-            e.preventDefault();
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault();
 
-            const name = document.getElementById("name").value;
-            const email = document.getElementById("email").value;
-            const message = document.getElementById("message").value;
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const message = document.getElementById("message").value;
 
-            const res = await fetch("/contact", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ name, email, message })
-            });
+        const API_URL =
+            window.location.hostname === "localhost" ||
+            window.location.hostname === "127.0.0.1"
+                ? "http://localhost:3000/contact"
+                : "/contact";
 
-            if (res.ok) {
-                msg.classList.remove("hidden");
-                msg.innerText = "✔ Message Sent Successfully";
-                form.reset();
-            } else {
-                msg.classList.remove("hidden");
-                msg.innerText = "✖ Error saving";
-            }
+        const res = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ name, email, message })
         });
-    </script>
+
+        if (res.ok) {
+            msg.classList.remove("hidden");
+            msg.innerText = "✔ Message Sent Successfully";
+            form.reset();
+        } else {
+            msg.classList.remove("hidden");
+            msg.innerText = "✖ Error saving";
+        }
+    });
+</script>
 
     <script>
         function revealOnScroll() {
